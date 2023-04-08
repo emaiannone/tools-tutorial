@@ -1,2 +1,6 @@
-# tools-tutorial
-Tutorials for running various tools, like EvoSuite or Eclipse Steady, meant for teaching
+# Tools Tutorial
+
+- [ ] [EvoSuite](evosuite)
+- [ ] [Randoop](randoop)
+
+Make sure you the under analysis project, for instance with : `mvn package -DskipTests=true`.
