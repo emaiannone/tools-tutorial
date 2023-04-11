@@ -71,9 +71,9 @@ The resulting `.class` files will be stored in the same directory of the source 
 java -cp randoop-tests:<PROJECT-CP>:<PATH-TO>/randoop-all-4.3.2.jar:<PATH-TO>/junit-platform-console-standalone-1.9.2.jar org.junit.platform.console.ConsoleLauncher -c <TEST-CLASS-FQN>
 ```
 
-TODO Il fatto dei test che so strani
+Note: if we replace `-c <TEST-CLASS-FQN>` with `--scan-class-path`, all the compiled EvoSuite tests will be launched at once.
 
-It is not rare that Randoop generate "weird" tests. That is, it creates tests with many `null` objects to fill parameters list to invoke methods. This happens because Randoop will not call any method outside the class supplied with `--testclass`. Hence, we have to supply a larger list of classes. To understand which is the most suitable set of classes, we might call this:
+It is not rare that Randoop generates "weird" tests. That is, it creates tests with many `null` objects to fill parameters list to invoke methods. This happens because Randoop will not call any method outside the class supplied with `--testclass`. Hence, we have to supply a larger list of classes. To understand which is the most suitable set of classes, we might call this:
 
 ```sh
 jdeps -apionly -v -R -cp <PROJECT-CP> <CLASS-FILE-PATH> | grep -v '^[A-Za-z]' | sed -E 's/^.* -> ([^ ]+) .*$/\1/' | sort | uniq > myclasses.txt
@@ -81,30 +81,19 @@ jdeps -apionly -v -R -cp <PROJECT-CP> <CLASS-FILE-PATH> | grep -v '^[A-Za-z]' | 
 
 From this list of classes we might want to remove those uneeded, for instance all classes under `java.*`. We re-run Randoop but this time using `--classlist=myclasses.txt` instead of `--testclass=<CLASS-FQN>`. The new generated tests are noticeably different now!
 
-Note: if some 
-
-
-
-TODO Il fatto dei metodi problemtici
+Note: it might happen that JUnit abruptly end without raising any error. If we re-run JUnit using `--details verbose` we can see the last executed test and get information of why this happened. One possible reason could be the closure of certain streams affecting the behavior of JUnit, e.g., invoking the `close()` method of a `Closeable` object. In these cases, we can use `--omit-methods=close`, i.e., a regex that will not allow Randoop to call the matched methods. 
 
 ## Configuring Randoop 4.3.2 from command line (Unix-like)
 
-TODO Opzioni CLI
+EvoSuite can be configured with a large number of command-line options. The most important ones:
 
-TODO Contratti?
-
-
-```sh
-java -cp ../../commons-csv/target/classes:randoop-all-4.3.2.jar randoop.main.Main gentests --classlist=myclasses.txt --time-limit=60 --junit-output-dir=randoop-tests --omit-methods=close
-```
-
-```sh
-javac $(find randoop-tests -name "*.java") -cp ../../commons-csv/target/classes:randoop-all-4.3.2.jar:/home/emaia/.m2/repository/org/junit/jupiter/junit-jupiter/5.9.1/junit-jupiter-5.9.1.jar:/home/emaia/.m2/repository/org/hamcrest/hamcrest/2.2/hamcrest-2.2.jar
-```
-
-```sh
-java -cp ./randoop-tests:../../commons-csv/target/classes:randoop-all-4.3.2.jar:/home/emaia/.m2/repository/org/junit/platform/junit-platform-console-standalone/1.9.2/junit-platform-console-standalone-1.9.2.jar org.junit.platform.console.ConsoleLauncher -c RegressionTest --details verbose
-```
+- `--testjar=myjar.jar` tells Randoop to generate tests for all the classes inside `myjar.jar`.
+- `--minimize-error-test=true` tells Randoop to minimize the error revealing tests, as they are usually very long to debug. By default, this is not done.
+- `--specifications=myspecs.txt` tells Randoop to generate better error-revealing tests by specifying the contracts of methods. For more details, see [here](https://randoop.github.io/randoop/manual/index.html#specifying-behavior).
+- `--maxsize` tells Randoop the maximum number of statements per test. By default, 100 is used.
+- `--null-ratio` tells Randoop the probability of using a `null` value when objects can be placed, if it knows how to construct them. By default, 0.05 is used.
+- `--testsperfile` tells Randoop the maximum number of test methods per test file. By default, 500 is used.
+- `--deterministic=true` tells Randoop to use a prefixed seed for random generators, ensuring reproducibility. By default, determinism is not guaranteed.
 
 ## References
 
