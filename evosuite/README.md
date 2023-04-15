@@ -17,10 +17,12 @@ git checkout v1.2.0
 mvn package -DskipTests=true
 ```
 
-After `mvn package` ends (should not take long), the executable JAR with all the dependencies can be found in the `target/` directory. To ensure it works correctly use:
+After `mvn package` ends (should not take long), the executable JAR with all the dependencies can be found in the `target/` directory. Move it in your workspace and make sure it works correctly use:
 
 ```sh
-java -jar <PATH-TO>/evosuite-1.2.0.jar
+mv evosuite-1.2.0.jar <DIR_YOU-LIKE>
+cd <DIR_YOU-LIKE>
+java -jar evosuite-1.2.0.jar
 ```
 
 ## Running EvoSuite 1.2.0 from command line (Unix-like)
@@ -28,9 +30,11 @@ java -jar <PATH-TO>/evosuite-1.2.0.jar
 **Requirements**:
 
 - `Java` 8
+- `Maven` 3.1+
 - A `junit` command-line launcher (in the following, JUnit Platform Console Standalone 1.9.2 is used)
 
 Make sure the project to test is compiled. For Maven-based projects, you can use:
+
 ```sh
 cd <PATH-PROJECT>
 mvn package -DskipTests=true

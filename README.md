@@ -1,4 +1,5 @@
 # Tools Tutorial
 
 - [x] [EvoSuite](evosuite)
-- [ ] [Randoop](randoop)
+- [x] [Randoop](randoop)
+- [ ] [FindSecBugs](findsecbugs)

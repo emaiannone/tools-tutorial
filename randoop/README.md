@@ -19,13 +19,15 @@ pip install html5validator
 ./gradlew build -x check
 ```
 
-After `./gradlew` ends (might take ~10 minutes), the JAR with all the dependencies, i.e., `randoop-all-4.3.2.jar`, can be found in the `build/libs` directory. To ensure it works correctly use:
+After `./gradlew` ends (might take ~10 minutes), the JAR with all the dependencies, i.e., `randoop-all-4.3.2.jar`, can be found in the `build/libs` directory. Move it in your workspace and make sure it works correctly:
 
 ```sh
-java -cp <PATH-TO>/randoop-all-4.3.2.jar randoop.main.Main
+mv randoop-all-4.3.2.jar <DIR_YOU-LIKE>
+cd <DIR_YOU-LIKE>
+java -cp randoop-all-4.3.2.jar randoop.main.Main
 ```
 
-Note: the JAR is not executable, so we have to explicitly add the JAR in the classpath and specify the fully-qualified name of the class with the `main()` method to invoke.
+Note: since the Randoop JAR is **not executable**, so we have to explicitly add the JAR in the classpath and call the fully-qualified name of the class containing the `main()` method.
 
 ## Running Randoop 4.3.2 from command line (Unix-like)
 
@@ -35,6 +37,7 @@ Note: the JAR is not executable, so we have to explicitly add the JAR in the cla
 - A `junit` command-line launcher (in the following, JUnit Platform Console Standalone 1.9.2 is used)
 
 Make sure the project to test is compiled. For Maven-based projects, you can use:
+
 ```sh
 cd <PATH-PROJECT>
 mvn package -DskipTests=true
@@ -85,7 +88,7 @@ Note: it might happen that JUnit abruptly end without raising any error. If we r
 
 ## Configuring Randoop 4.3.2 from command line (Unix-like)
 
-EvoSuite can be configured with a large number of command-line options. The most important ones:
+Randoop can be configured with a large number of command-line options. The most important ones:
 
 - `--testjar=myjar.jar` tells Randoop to generate tests for all the classes inside `myjar.jar`.
 - `--minimize-error-test=true` tells Randoop to minimize the error revealing tests, as they are usually very long to debug. By default, this is not done.
