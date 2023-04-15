@@ -56,7 +56,7 @@ FindSecBugs prints the results on the `stdout`. The output is quite messy... We 
 ./findsecbugs -progress -html -output report.html <PROJECT-DIR>
 ```
 
-We observe that FindSecBugs analyzes everything, test classes as well. We are not interested in analyzing test classes, as they might induce the tool in false alarms. We would like to exclude classes inside specific directories or with specific names. Since FindSecBug builds on top of FindBugs, we can reuse its concept of [**filter files**](https://findbugs.sourceforge.net/manual/filter.html), which are XML files in which we can tell the tool to exclude certain files. With the following configuration, we can exclude the classes ending their name with `tests?`. 
+We observe that FindSecBugs analyzes everything, test classes as well. We are not interested in analyzing test classes, as they might induce the tool in false alarms. We would like to exclude classes inside specific directories or with specific names. Since FindSecBug builds on top of FindBugs/SpotBugs, we can reuse its concept of [**filter files**](https://spotbugs.readthedocs.io/en/latest/filter.html), which are XML files in which we can tell the tool to exclude certain files. With the following configuration, we can exclude the classes ending their name with `tests?`. 
 
 ```xml
 <FindBugsFilter>
@@ -75,6 +75,8 @@ We can write this content into a file named as we wish, e.g., `myexclude.xml`. N
 
 ## Configuring FindSecBugs 1.12.0 from command line (Unix-like)
 
-FindSecBugs can be configured with a large number of command-line options. The most important ones:
+FindSecBugs can be configured with a large number of command-line options. All these options come from the original FindBugs/SpotBugs (full list [here](https://spotbugs.readthedocs.io/en/latest/running.html#common-command-line-options)). The most interesting are:
 
-TODO 
+- `-effort:value` tells FindSecBugs to employ more memory consuming analyses in hope of reducing the rate of false alarms. More info [here](https://spotbugs.readthedocs.io/en/latest/effort.html).
+- `-low`/`-medium`/-`high` tells FindSecBugs to detect bugs of at least low, medium, or high severity, respectively. By default, `-medium` is active.
+- `-xargs` tells FindSecBugs to read the list of classes/JARs/directories to analyze from `stdin`, meaning that we can supply the classes/JARs/directories and projects from a pipe, e.g., `cat listclasses.txt | ./findsecbugs -progress -html -output report.html`.
