@@ -11,13 +11,12 @@
 Download the executable JAR from [here](https://github.com/EvoSuite/evosuite/releases/tag/v1.2.0) or build from source calling the following commands from the terminal:
 
 ```sh
-git clone https://github.com/EvoSuite/evosuite
+git clone -b " v1.2.0" --single-branch --depth 1 https://github.com/EvoSuite/evosuite
 cd evosuite
-git checkout v1.2.0
 mvn package -DskipTests=true
 ```
 
-After `mvn package` ends (should not take long), the executable JAR with all the dependencies can be found in the `target/` directory. Move it in your workspace and make sure it works correctly use:
+After `mvn package` ends (should not take long), the executable JAR with all the dependencies can be found in the `target/` directory. Move it in your workspace and make sure it works correctly:
 
 ```sh
 mv evosuite-1.2.0.jar <DIR_YOU-LIKE>

@@ -1,4 +1,4 @@
-# EvoSuite
+# FindSecBugs
 
 ## Installing FindSecBugs 1.12.0 from command line (Unix-like)
 
@@ -11,9 +11,8 @@
 Download the standalone tool from [here](https://github.com/find-sec-bugs/find-sec-bugs/releases/tag/version-1.12.0) or build from source calling the following commands from the terminal:
 
 ```sh
-git clone https://github.com/find-sec-bugs/find-sec-bugs
+git clone -b "version-1.12.0" --single-branch --depth 1 https://github.com/find-sec-bugs/find-sec-bugs
 cd find-sec-bugs
-git checkout version-1.12.0
 cd cli
 gradle packageCli
 ```
@@ -37,7 +36,7 @@ unzip findsecbugs-cli.zip && rm findsecbugs-cli-1.12.0.zip
 
 - `Java` 8
 
-Make sure the project to test is compiled. For Maven-based projects, you can use:
+Make sure the project to analyze is compiled. For Maven-based projects, you can use:
 
 ```sh
 cd <PATH-PROJECT>

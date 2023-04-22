@@ -12,9 +12,8 @@
 Download the JAR with all the dependencies from [here](https://github.com/randoop/randoop/releases/tag/v4.3.2), named `randoop-all-4.3.2.jar`. Alternatively, you can build from source by calling the following commands from the terminal:
 
 ```sh
-git clone https://github.com/randoop/randoop
+git clone -b " v4.3.2" --single-branch --depth 1 https://github.com/randoop/randoop
 cd randoop
-git checkout v4.3.2
 pip install html5validator
 ./gradlew build -x check
 ```
