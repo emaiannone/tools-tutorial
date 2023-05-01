@@ -32,14 +32,9 @@ cd <DIR_YOU-LIKE>
 
 - `Java` 8
 
-Make sure the project to analyze is compiled. For Maven-based projects, you can use:
+Make sure the project to test is compiled (see the [prerequirements](../README.md)).
 
-```sh
-cd <PATH-PROJECT>
-mvn package -DskipTests=true
-```
-
-Run OWASP DC analysis, indicating the project directory (where the `.jar` and `.war` files can be found):
+Run OWASP DC analysis indicating the project directory (where the `.jar` and `.war` files can be found):
 
 ```sh
 ./release/bin/dependency-check.sh -s <PROJECT-DIR>

@@ -35,12 +35,7 @@ Note: since the Randoop JAR is **not executable**, so we have to explicitly add 
 - `Java` 8
 - A `junit` command-line launcher (in the following, JUnit Platform Console Standalone 1.9.2 is used)
 
-Make sure the project to test is compiled. For Maven-based projects, you can use:
-
-```sh
-cd <PATH-PROJECT>
-mvn package -DskipTests=true
-```
+Make sure the project to test is compiled (see the [prerequirements](../README.md)).
 
 Run Randoop generation, indicating the class which we want to generate the tests for.
 

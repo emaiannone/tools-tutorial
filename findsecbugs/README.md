@@ -36,12 +36,7 @@ unzip findsecbugs-cli.zip && rm findsecbugs-cli-1.12.0.zip
 
 - `Java` 8
 
-Make sure the project to analyze is compiled. For Maven-based projects, you can use:
-
-```sh
-cd <PATH-PROJECT>
-mvn package -DskipTests=true
-```
+Make sure the project to test is compiled (see the [prerequirements](../README.md)).
 
 Run FindSecBugs analysis, indicating the project directory (where the `.class` files can be found):
 

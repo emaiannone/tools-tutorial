@@ -32,12 +32,7 @@ java -jar evosuite-1.2.0.jar
 - `Maven` 3.1+
 - A `junit` command-line launcher (in the following, JUnit Platform Console Standalone 1.9.2 is used)
 
-Make sure the project to test is compiled. For Maven-based projects, you can use:
-
-```sh
-cd <PATH-PROJECT>
-mvn package -DskipTests=true
-```
+Make sure the project to test is compiled (see the [prerequirements](../README.md)).
 
 Run EvoSuite generation, indicating the class which we want to generate the tests for.
 
