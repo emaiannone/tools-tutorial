@@ -8,8 +8,6 @@
 
 Run the docker daemon (`dockerd`) and download the official image from DockerHub. Check the ID of the downloaded image and use it to run a container to check if it works correctly.
 
-# TODO TEST on public safe URL (www.example.com)
-
 ```sh
 dockerd
 docker pull owasp/zap2docker-stable:2.12.0
@@ -60,14 +58,39 @@ docker run --rm --net zapnet owasp/zap2docker-stable:2.12.0 zap-baseline.py -t h
 If everything worked fine, we should see the analyses results on stdout. If you want to access the full log, we have to run the analysis through the shell:
 
 ```sh
-docker run --net zapnet -it owasp/zap2docker-stable:2.12.0 /bin/bash
+docker run --rm --net zapnet -it owasp/zap2docker-stable:2.12.0 /bin/bash
 ./zap-baseline.py -t http://<WEB-APP-CONTAINER-IP>:<WEB-APP-CONTAINER:PORT>
 cat /home/zap/.ZAP/zap.log
 exit
 ```
 
-Inside `/home/zap/.ZAP/reports` there are reports in many different formats. We can transfer them into our host machine for further inpsection.
+In order to access the reports we have to mount a volume to `/zap/wrk`, which is where ZAP will write the real reports. We connect our `./zapvol` directory (create if it does not exist) to the container's directory `/zap/wrk` and grant it read and write accesses. Let's generate a report in Markdown format:
 
 ```sh
-docker cp /home/zap/.ZAP/reports ./
+docker run -v $(pwd)/zapvol:/zap/wrk:rw --rm --net zapnet -it owasp/zap2docker-stable:2.12.0 /bin/bash
+./zap-baseline.py -t http://<WEB-APP-CONTAINER-IP>:<WEB-APP-CONTAINER:PORT> -w report_md.md
+exit
 ```
+
+We should see the reports we generate in the mounted directory `./zapvol`.
+
+By changing `zap-baseline.py` into `zap-full-scan.py` or `zap-api-scan.py` we can run the Full or API analyses, respectively.
+
+## Configuring OWASP ZAP 2.12.0 in Docker container (Unix-like)
+
+OWASP ZAP packaged scans (not to be confused with the [command-line](https://www.zaproxy.org/docs/desktop/cmdline/) of ZAP itself) can be configured with a large number of command-line options (full list [here](https://www.zaproxy.org/docs/desktop/cmdline/)). The most interesting are:
+
+- `-r <html_file>` tells ZAP to export into an HTML file called `<html_file>`.
+- `-w <md_file>` tells ZAP to export into a Markdown file called `<md_file>`.
+- `-x <xml_file>` tells ZAP to export into a XML file called `<xml_file>`.
+- `-J <json_file>` tells ZAP to export into a JSON file called `<json_file>`.
+- `-m <mins>` tells ZAP to spend `<mins>` minutes during the crawling (the default depends on the scan).
+- `-j` tells ZAP to use the Ajax spider in addition to the traditional one.
+- `--hook <hook_file>` tells ZAP the Python file containing the customized scan hooks.
+- `-z <zap_options>` tells ZAP the command-line options to forward to the base CLI tool.
+
+Full list depends on the individual scans:
+
+- [Baseline Scan](https://www.zaproxy.org/docs/docker/baseline-scan/)
+- [Full Scan](https://www.zaproxy.org/docs/docker/full-scan/)
+- [API Scan](https://www.zaproxy.org/docs/docker/api-scan/)
