@@ -31,8 +31,7 @@ cd <DIR_YOU-LIKE>
 **Requirements**:
 
 - `Java` 8
-
-Make sure the project to test is compiled (see the [prerequirements](../README.md)).
+- The project to test is compiled (see the [prerequirements](../README.md)).
 
 Run OWASP DC analysis indicating the project directory (where the `.jar` and `.war` files can be found):
 

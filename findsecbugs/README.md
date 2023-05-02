@@ -35,8 +35,7 @@ unzip findsecbugs-cli.zip && rm findsecbugs-cli-1.12.0.zip
 **Requirements**:
 
 - `Java` 8
-
-Make sure the project to test is compiled (see the [prerequirements](../README.md)).
+- The project to test is compiled (see the [prerequirements](../README.md)).
 
 Run FindSecBugs analysis, indicating the project directory (where the `.class` files can be found):
 

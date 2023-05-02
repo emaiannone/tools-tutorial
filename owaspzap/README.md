@@ -21,8 +21,7 @@ If everything worked correctly, we should see the output of the baseline analysi
 **Requirements**:
 
 - `docker`
-
-Make sure the web application to test is deployed and accessible (see the [prerequirements](../README.md)).
+- The web application to test is deployed and accessible (see the [prerequirements](../README.md)).
 
 Run OWASP ZAP Baseline Scan indicating the web application starting URL:
 
