@@ -4,7 +4,7 @@
 - [x] [Randoop](randoop)
 - [x] [FindSecBugs](findsecbugs)
 - [x] [OWASP Dependency Check](owaspdc)
-- [ ] [OWASP Zed Attack Proxy](owaspzap)
+- [x] [OWASP Zed Attack Proxy](owaspzap)
 
 # Prerequisites
 
