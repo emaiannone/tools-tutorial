@@ -8,7 +8,7 @@
 - `Maven` 3.1+
 - `git` (any version should be fine)
 
-Download the executable JAR from [here](https://github.com/EvoSuite/evosuite/releases/tag/v1.2.0). Alternatively, you can build from source calling the following commands from the terminal:
+Download the main executable JAR from [here](https://github.com/EvoSuite/evosuite/releases/tag/v1.2.0). Alternatively, you can build from source calling the following commands from the terminal:
 
 ```sh
 git clone -b "v1.2.0" --single-branch --depth 1 https://github.com/EvoSuite/evosuite
@@ -30,20 +30,20 @@ java -jar evosuite-1.2.0.jar
 
 - `Java` 8
 - `Maven` 3.1+
-- A `junit` command-line launcher (in the following, JUnit Platform Console Standalone 1.9.2 is used).
+- A `junit` command-line launcher (in the following, [JUnit Platform Console Standalone 1.9.2](https://mvnrepository.com/artifact/org.junit.platform/junit-platform-console-standalone/1.9.2) is used).
 - The project to test is compiled (see the [prerequirements](../README.md)).
 
 Run EvoSuite generation, indicating the class which we want to generate the tests for.
 
 ```sh
-java -jar <PATH-TO>/evosuite-1.2.0.jar -class <CLASS-FQN> -projectCP <PROJECT-CP>`
+java -jar <PATH-TO>/evosuite-1.2.0.jar -class <CLASS-FQN> -projectCP <PROJECT-CP>
 ```
 
 Note: `<PROJECT-CP>` must be the base directory where the `.class` file of the target class is stored, e.g., `target/classes`.
 
 After EvoSuite ends, the generated tests are stored in the current working directory under `evosuite-tests/`.
 
-The tests must be compiled before they can be used. EvoSuite tests require JUnit 4+ and Hamcrest 1.3+. You can either manually download them from the [Maven Central Repository](https://central.sonatype.com/) or re-use the dependencies that are already used by the project under test, so that both existing tests and EvoSuite's tests will use the exact same dependencies. If the project under test is Maven-based, you can use:
+The tests must be compiled before they can be used. EvoSuite tests require JUnit 4+ and Hamcrest 1.3+. You can either manually download them from the Maven Central Repository (e.g., [JUnit 5.9.1](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter/5.9.1), [Hamcrest 2.2](https://mvnrepository.com/artifact/org.hamcrest/hamcrest/2.2)). Alternatively, you can re-use the dependencies that are already used by the project under test, so that both existing tests and EvoSuite's tests will use the exact same dependencies. If the project under test is Maven-based, you can use:
 
 ```sh
 mvn dependency:copy-dependencies -DincludeArtifactIds=junit,junit-jupiter,hamcrest,hamcrest-core
@@ -52,7 +52,7 @@ mvn dependency:copy-dependencies -DincludeArtifactIds=junit,junit-jupiter,hamcre
 This command will look for dependencies named `junit`, `junit-jupiter`, `hamcrest`, or `hamcrest-core` that the project use and copy them into `target/dependency`. We take notes of the ones successfully copied (in this example, the tested project uses JUnit 5.9.1 and Hamcrest 2.2). Now, we can compile all the EvoSuite test files using the appropriate classpath:
 
 ```sh
-javac $(find ./evosuite-tests -name "*.java") -cp <PATH-TO>/target/classes:<PATH-TO>/evosuite-1.2.0.jar:<PATH-TO>/junit-jupiter-5.9.1.jar:<PATH-TO>/hamcrest-2.2.jar`
+javac $(find ./evosuite-tests -name "*.java") -cp <PATH-TO>/target/classes:<PATH-TO>/evosuite-1.2.0.jar:<PATH-TO>/junit-jupiter-5.9.1.jar:<PATH-TO>/hamcrest-2.2.jar
 ```
 
 The resulting `.class` files will be stored in the same directory of the source files (`evosuite-tests/`). Now, we can run the generated tests using a JUnit launcher. For example, with JUnit 5 we can use:
@@ -77,7 +77,3 @@ EvoSuite can be configured with a large number of command-line options and Java 
 - `-Dchromosome_length=<LEN>` tells EvoSuite to have tests cases with at most `<LEN>` statements. By default, 40 is used.
 
 To see the full list of command-line options, we can call EvoSuite with `-h` option. To see the full list of properties, we can use the `-listParameters` option. 
-
-## References
-
-- [EvoSuite Tutorial](https://www.evosuite.org/documentation/tutorial-part-1/)
