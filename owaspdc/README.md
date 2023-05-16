@@ -21,9 +21,9 @@ mvn -s settings.xml install -DskipTests=true
 After `mvn install` ends (should not take long), the entire tool can be found in `cli/target/release/`. Move this directory in your workspace and make sure the tool works correctly:
 
 ```sh
-mv cli/target/release/ <DIR_YOU-LIKE>
-cd <DIR_YOU-LIKE>
-./release/bin/dependency-check.sh
+mv cli/target/release/ <DIR-YOU-LIKE>
+cd <DIR-YOU-LIKE>/bin
+./dependency-check.sh
 ```
 
 ## Running OWASP DC 8.1.2 from command line (Unix-like)
@@ -36,7 +36,7 @@ cd <DIR_YOU-LIKE>
 Run OWASP DC analysis indicating the project directory (where the `.jar` and `.war` files can be found):
 
 ```sh
-./release/bin/dependency-check.sh -s <PROJECT-DIR>
+./dependency-check.sh -s <PROJECT-DIR>
 ```
 
 OWASP DC has a cold start phase, where it will download the CVE data into `data/` directory (~150 MB). This phase might take some minutes. By default, the results are exported as a HTML page written in the current directory.
@@ -44,7 +44,7 @@ OWASP DC has a cold start phase, where it will download the CVE data into `data/
 If we inspect the report we can find the list of dependencies affected by known vulnerabilities. The list can be empty, but we can still inspect the full list of dependencies. Here we notice that also **test** dependencies (e.g., Junit, Hamcrest) and JARs containing the source have been analyzed. We have no specific options to avoid these analyses, but we can tell it to ignore certain JAR files using patterns. For instance:
 
 ```sh
-./release/bin/dependency-check.sh -s <PROJECT-DIR> --exclude **/*-sources.jar --exclude **/*-tests.jar --exclude **/junit*.jar -exclude **/hamcrest*.jar
+./dependency-check.sh -s <PROJECT-DIR> --exclude **/*-sources.jar --exclude **/*-tests.jar --exclude **/junit*.jar -exclude **/hamcrest*.jar
 ```
 
 ## Configuring OWASP DC 8.1.2 from command line (Unix-like)
