@@ -26,35 +26,31 @@ If everything worked correctly, we should see the output of the baseline analysi
 Run OWASP ZAP Baseline Scan indicating the web application starting URL:
 
 ```sh
-docker run --rm owasp/zap2docker-stable:2.12.0 zap-baseline.py -t <START-URL>
+docker run --rm owasp/zap2docker-stable:2.12.0 zap-baseline.py -t  http://localhost:<WEB-APP-PORT>
 ```
 
-We see that ZAP cannot access the application from another container, as they are meant to be isolated enviroments. To solve this, we need to create a Docker Network, which allows the various container to "be on the same network". We can connect a running container to the newly created network without stopping it. 
+By changing `zap-baseline.py` into `zap-full-scan.py` or `zap-api-scan.py` we can run the Full or API analyses, respectively.
+
+We observe that ZAP cannot access the application from another container, as they are meant to be isolated enviroments. To solve this, we need to create a Docker Network, which allows the various container to "be on the same network". We can connect a running container to the newly created network without stopping it. 
 
 ```sh
 docker network create zapnet
 docker network connect zapnet <WEB-APP-CONTAINER-ID>
 ```
 
-Now, let's try to run the analyses:
-
-```sh
-docker run --rm --net zapnet owasp/zap2docker-stable:2.12.0 zap-baseline.py -t http://localhost:<WEB-APP-CONTAINER:PORT>
-```
-
-After a while we will see ZAP returns an error regarding a connection refused. Indeed, here we used `localhost`, but the web application is not served on this container, but on another one! Hence, we need the web application's container IP address:
+If we try again we will see we have the same error. The problem so lies in `localhost`, which represents the ZAP container, not the web application's container. Hence, we either , but on another one! We can either replace `localhost` with the web application's container ID or find its IP address using:
 
 ```sh
 docker inspect <WEB-APP-CONTAINER-ID> | grep "IPAddress"
 ```
 
-We take note of the IP address printed on stdout, and use it to tell the ZAP container where to start crawling: 
+In either cases, we correct the URL like this:
 
 ```sh
-docker run --rm --net zapnet owasp/zap2docker-stable:2.12.0 zap-baseline.py -t http://<WEB-APP-CONTAINER-IP>:<WEB-APP-CONTAINER:PORT>
+docker run --rm --net zapnet owasp/zap2docker-stable:2.12.0 zap-baseline.py -t http://<WEB-APP-CONTAINER-ID-OR-IP>:<WEB-APP-PORT>
 ```
 
-If everything worked fine, we should see the analyses results on stdout. If you want to access the full log, we have to run the analysis through the shell:
+If everything worked fine, we should see the analyses results on stdout. If we want to access the log, we have to retrieve the file `/home/zap/.ZAP/zap.log` inside the ZAP container. We can do something like this:
 
 ```sh
 docker run --rm --net zapnet -it owasp/zap2docker-stable:2.12.0 /bin/bash
@@ -63,7 +59,7 @@ cat /home/zap/.ZAP/zap.log
 exit
 ```
 
-In order to access the reports we have to mount a volume to `/zap/wrk`, which is where ZAP will write the real reports. We connect our `./zapvol` directory (create if it does not exist) to the container's directory `/zap/wrk` and grant it read and write accesses. Let's generate a report in Markdown format:
+The log is not a detailed report. To have it, we have to mount a volume attacked to `/zap/wrk`, which is the directory where ZAP will export the real reports. We connect a local directory of ours, e.g., called  `zapvol` to the container's directory `/zap/wrk` and grant it read and write accesses. Let's generate a report in Markdown format:
 
 ```sh
 docker run -v $(pwd)/zapvol:/zap/wrk:rw --rm --net zapnet -it owasp/zap2docker-stable:2.12.0 /bin/bash
@@ -71,9 +67,7 @@ docker run -v $(pwd)/zapvol:/zap/wrk:rw --rm --net zapnet -it owasp/zap2docker-s
 exit
 ```
 
-We should see the reports we generate in the mounted directory `./zapvol`.
-
-By changing `zap-baseline.py` into `zap-full-scan.py` or `zap-api-scan.py` we can run the Full or API analyses, respectively.
+When ZAP ends, we should see the reports directly inside the directory `zapvol` in our working directory.
 
 ## Configuring OWASP ZAP 2.12.0 in Docker container (Unix-like)
 
